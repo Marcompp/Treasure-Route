@@ -1,0 +1,98 @@
+{
+"Mayara":{
+	"nome": "Mayara", 
+	"hp": 10, 
+	"str": 4, 
+	"skl": 5, 
+	"int": 3, 
+	"mor": 5
+	}, 
+"Juju":{
+	"nome": "Juju", 
+	"hp": 10, 
+	"str": 5, 
+	"skl": 3, 
+	"int": 2, 
+	"mor": 4
+	},
+"Leozin":{
+	"nome": "Leozin", 
+	"hp": 10, 
+	"str": 6, 
+	"skl": 3, 
+	"int": 1, 
+	"mor": 2
+	},
+"Marcones":{
+	"nome": "Marcones", 
+	"hp": 10, 
+	"str": 2, 
+	"skl": 2, 
+	"int": 7, 
+	"mor": 1
+	},
+"Minos":{
+	"nome": "Minos", 
+	"hp": 10, 
+	"str": 7, 
+	"skl": 2, 
+	"int": 2, 
+	"mor": 2
+	},
+"Carver":{
+	"nome": "Carver", 
+	"hp": 10, 
+	"str": 5, 
+	"skl": 2, 
+	"int": 3, 
+	"mor": 4
+	},
+"Gheb":{
+	"nome": "Gheb", 
+	"hp": 10, 
+	"str": 6, 
+	"skl": 1, 
+	"int": 1, 
+	"mor": 4
+	},
+"Ice":{
+	"nome": "Carver", 
+	"hp": 10, 
+	"str": 3, 
+	"skl": 5, 
+	"int": 2, 
+	"mor": 3
+	},
+"Donpei":{
+	"nome": "Donpei", 
+	"hp": 10, 
+	"str": 4, 
+	"skl": 3, 
+	"int": 1, 
+	"mor": 2
+	},
+"Aosuke":{
+	"nome": "Aosuke", 
+	"hp": 10, 
+	"str": 2, 
+	"skl": 5, 
+	"int": 3, 
+	"mor": 3
+	},
+"Jack":{
+	"nome": "Jack", 
+	"hp": 10, 
+	"str": 3, 
+	"skl": 5, 
+	"int": 3, 
+	"mor": 2
+	},
+"Jane":{
+	"nome":"Jane",
+	"hp": 10, 
+	"str": 2, 
+	"skl": 5, 
+	"int": 2, 
+	"mor": 5
+	}
+}
