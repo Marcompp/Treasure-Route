@@ -3,6 +3,7 @@ from pygame.locals import *
 from sys import exit
 import time
 import random
+import Batalha
 import Misc
 import json
 
@@ -111,8 +112,8 @@ def proceed(screen):
 	while True:
 		endar()
 		tex = game_font.render("Proceed", 1, (0, 0, 0))
-		screen.blit(tex, (185,300))
-		screen.blit(arrow(), (175,295))
+		screen.blit(tex, (285,300))
+		screen.blit(arrow(), (275,295))
 		pressed_keys = pygame.key.get_pressed()
 		if pressed_keys[K_SPACE]:
 			return
@@ -194,7 +195,7 @@ def charjoin(char,screen,y):
 	story = Misc.Loadstory()
 	charlist = Misc.Charlist()
 	if len(party) >= 4:
-		slowblit("You have too many crew members.",y)
+		slowblit("You have too many crew members.",screen,y)
 	else:
 		party.append(charlist[char])
 		mes = "{0} joined the crew!".format(char)
@@ -391,14 +392,68 @@ def Suicide(char,screen):
 	Text = ["Crushed by their desperate situation",
 					"at sea, {} decides to end their ".format(party[char]["nome"]),
 					"own life."]
+	y = walloftext(Text,screen)
+	party =Misc.Loadparty()
 	if len(party) >1:
 		choices = ["Don't do it!","Good riddance!"]
 		ra = choose(choices,Text,screen)
+		outco = random.randrange(10)
+		if ra == 1:
+			if outco>=6:
+				Text = ["Moved by their crewmate's care",
+							"for them, {} decides to go on".format(party[char]["nome"]),
+							"living for a while longer."]
+				y = walloftext(Text,screen)
+				morale(char,2,screen,y)
+			elif outco>=3:
+				Text = ["{} decides to go through with",
+							"it despite their crewmates' pleas.",
+							"But the rope they use to hang"
+							"themselves is rotten and breaks",
+							"halfway through the attempt."]
+				y = walloftext(Text,screen)
+				Battle.damage(char,screen,y)
+			else:
+				Text = ["{} isn't swayed.".format(party[char]["nome"]),
+							"{} simply jumps of the boat".format(party[char]["nome"]),
+							"and fades into the ocean."]
+				y = walloftext(Text,screen)
+				party.remove(party[char])
+				Misc.Saveparty(party)
+				for ar in party:
+					morale(char,-1,screen,y)
+					y +=30
+		if ra == 2:
+			if outco >= 6:
+				Text = ["{} goes and jumps off the boat".format(party[char]["nome"]),
+							"much to the others delight"]
+				y = walloftext(Text,screen)
+				party.remove(party[char])
+				for ar in party:
+					morale(char,1,screen,y)
+					y +=30
+			elif outco >= 3:
+				Text = ["{} unexpectedly jumps off the boat,".format(party[char]["nome"]),
+							"and everyone else feels very guilty",
+							"about it."]
+				y = walloftext(Text,screen)
+				party.remove(party[char])
+				for ar in party:
+					morale(char,-2,screen,y)
+					y +=30
+			else:
+				Text = ["{}, sees what everyone thinks of them".format(party[char]["nome"]),
+							"and vows to not end their life before",
+							"making them care."]
+				y = walloftext(Text,screen)
 
-
-		Text = ["The crew has a feast at daybreak",
-			"to celebrate their survival."]
-
+		Text = ["{} attempts suicide by hanging".format(party[char]["nome"]),
+				"but the rope they used was rotted",
+				"and snapped.",
+				"{} crashes to the floor".format(party[char]["nome"])]
+		y = walloftext(Text,screen)
+		Battle.damage(char,screen,y)
+	proceed(screen)
 
 
 def	Eatfood(screen):
@@ -445,11 +500,11 @@ def	Feast(screen):
 				y = walloftext(Text,screen)
 				morale(char,-1,screen,y)
 		if act == 2:
-			char1 = random.ranrange(len(party))
+			char1 = random.randrange(len(party))
 			if out <5:
 				char2 = char1
 				while char2 == char1:
-					char2 = random.ranrange(len(party))
+					char2 = random.randrange(len(party))
 				if party[char1]["int"] < party[char2]["int"]:
 					learner = char1
 					teacher = char2
@@ -483,6 +538,7 @@ def	Feast(screen):
 	proceed(screen)
 
 def Rationfood(screen):
+	party = Misc.Loadparty()
 	Text = ["The crew doesn't have enough food",
 			"to feed everyone, so they have to",
 			"ration it."]
@@ -502,8 +558,10 @@ def Foodfight(screen):
 		y = walloftext(Text,screen)
 		char = random.randrange(len(party))
 		Batalha.damage(char,screen,y)
+		y +=30
 		char = random.randrange(len(party))
 		Batalha.damage(char,screen,y)
+		y +=30
 	else:
 		Text = ["{} doesn't have enough food for".format(party[0]["nome"]),
 			"the day, but at least he doesn't.",
@@ -535,20 +593,24 @@ def Cannibal(screen):
 			"to cannibalise someone. Who should",
 			"be eaten first?"]
 		choices = []
-		char = charchoose(choices,screen)
+		char = charchoose(choices,Text,screen)
+		char -=1
 		Text = ["{} is eaten by his fellow crewmembers.".format(party[char]["nome"]),
 			"Everyone can eat, and there is even a",
 			"little left over!"]
 		#death sound
 		y = walloftext(Text,screen)
-		party.remove(party["char"])
+		party.remove(party[char])
+		Misc.Saveparty(party)
 		for char in range(len(party)):
 			morale(char,-1,screen,y)
 			y+=30
 		getsupply("food",2,screen,y)
+
 	else:
 		Text = ["The hunger leads {} to start eating".format(party[0]["nome"]),
 			"their own body."]
 		y = walloftext(Text,screen)
 		Batalha.damage(0,screen,y)
 		Batalha.damage(0,screen,y)
+	proceed(screen)
