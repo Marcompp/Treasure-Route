@@ -78,14 +78,13 @@ while True:
 			getattr(Evento,ratievs[random.randrange(len(ratievs))])(screen)
 		else:
 			getattr(Evento,hungevs[random.randrange(len(hungevs))])(screen)
-		time = 0
+		timeod = 0
 	if nexev >=23:
 		x = random.randrange(1,9)
 		if x >= 5:
 			y = random.randrange(len(party))
 			if party[y]["mor"]<= 0:
-				print("if")
-				getattr(Evento,despevs[random.randrange(len(despevs))])(char,screen)
+				getattr(Evento,despevs[random.randrange(len(despevs))])(y ,screen)
 			else:
 				getattr(Evento,randevs[random.randrange(len(randevs))])(screen)
 			nexev =0

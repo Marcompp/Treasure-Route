@@ -73,7 +73,7 @@ def damage(char,screen,y):
 		#death sound
 		mes = "{0} took mortal damage and died!".format(party[char]["nome"])
 		tex1 = game_font.render(mes, 1, (155, 0, 0))
-		party.remove(party["char"])
+		party.remove(party[char])
 	else:
 		#dmg sound
 		mes = "{0} took damage!".format(party[char]["nome"])
