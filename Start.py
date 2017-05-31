@@ -9,8 +9,8 @@ import Misc
 import json
 
 
-randevs=["Newspaper","TrainSkl","Castaway","Magicbo"]
-foodevs=["Eatfood","Feast","Alcoffering"]
+randevs=["Newspaper","TrainSkl","Castaway","Magicbo","Rowboat"]
+foodevs=["Eatfood","Eatfood","Eatfood","Feast","Alcoffering"]
 ratievs=["Rationfood","Foodfight"]
 hungevs=["Cannibal","Starving"]
 despevs=["Suicide"]

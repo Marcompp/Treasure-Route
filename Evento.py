@@ -51,6 +51,10 @@ def morale(char,many,screen,y):
 		tex1 = game_font.render(mes, 1, (255, 0, 0))
 	screen.blit(tex1, (100, y))
 	pygame.display.update()
+	if party[char]["mor"] >5:
+		party[char]["mor"] = 5
+	if party[char]["mor"] <0:
+		party[char]["mor"] = 0
 	time.sleep(0.8)
 	Misc.Saveparty(party)
 
@@ -239,6 +243,40 @@ def TrainSkl(screen):
 	statup(char,"skl",screen,y)
 	proceed(screen)
 
+def Rowboat(screen):
+	party = Misc.Loadparty()
+	story =Misc.Loadstory()
+	possible = ["Marcones","Jane"]
+	char = party[0]["nome"]
+	c =0
+	while char in story:
+		char = possible[random.randint(0,len(possible)-1)]
+		c +=1
+		if c >= (len(possible)+2):
+			Text = ["A small rowboat appears in the horizon.",
+							"It looks to be empty at first, but as it", 
+							"gets closer the crew can see there's a", 
+							"box with some gold in it. Maybe someone saved",
+							"their belongings before saving themselves?."]
+			y = walloftext(Text,screen)
+			getsupply("gold",2,screen,y)
+			proceed(screen)
+			return
+	Text = ["A small rowboat appears in the horizon.",
+			"There seems to be someone passed out", 
+			"inside! It's {}, who claims to have".format(char), 
+			"just survived a shipwreck and now wants",
+			"to come with you.",
+			"Allow {} to join your crew?".format(char)]
+	y = walloftext(Text,screen)
+	choices = ["Yes","No"]
+	YN = choose(choices,Text,screen)
+	screen.blit(paper(),(50,50))
+	y = 60
+	if YN == 1:
+		charjoin(char,screen,y)
+		proceed(screen)
+
 def Castaway(screen):
 	party = Misc.Loadparty()
 	story =Misc.Loadstory()
@@ -412,7 +450,7 @@ def Suicide(char,screen):
 							"themselves is rotten and breaks",
 							"halfway through the attempt."]
 				y = walloftext(Text,screen)
-				Battle.damage(char,screen,y)
+				Batalha.damage(char,screen,y)
 			else:
 				Text = ["{} isn't swayed.".format(party[char]["nome"]),
 							"{} simply jumps of the boat".format(party[char]["nome"]),
@@ -420,8 +458,8 @@ def Suicide(char,screen):
 				y = walloftext(Text,screen)
 				party.remove(party[char])
 				Misc.Saveparty(party)
-				for ar in party:
-					morale(char,-1,screen,y)
+				for ar in range(len(party)):
+					morale(ar,-1,screen,y)
 					y +=30
 		if ra == 2:
 			if outco >= 6:
@@ -429,8 +467,9 @@ def Suicide(char,screen):
 							"much to the others delight"]
 				y = walloftext(Text,screen)
 				party.remove(party[char])
-				for ar in party:
-					morale(char,1,screen,y)
+				Misc.Saveparty(party)
+				for ar in range(len(party)):
+					morale(ar,1,screen,y)
 					y +=30
 			elif outco >= 3:
 				Text = ["{} unexpectedly jumps off the boat,".format(party[char]["nome"]),
@@ -438,21 +477,22 @@ def Suicide(char,screen):
 							"about it."]
 				y = walloftext(Text,screen)
 				party.remove(party[char])
-				for ar in party:
-					morale(char,-2,screen,y)
+				Misc.Saveparty(party)
+				for ar in range(len(party)):
+					morale(ar,-2,screen,y)
 					y +=30
 			else:
 				Text = ["{}, sees what everyone thinks of them".format(party[char]["nome"]),
 							"and vows to not end their life before",
 							"making them care."]
 				y = walloftext(Text,screen)
-
+	else:
 		Text = ["{} attempts suicide by hanging".format(party[char]["nome"]),
 				"but the rope they used was rotted",
 				"and snapped.",
 				"{} crashes to the floor".format(party[char]["nome"])]
 		y = walloftext(Text,screen)
-		Battle.damage(char,screen,y)
+		Batalha.damage(char,screen,y)
 	proceed(screen)
 
 
@@ -462,6 +502,51 @@ def	Eatfood(screen):
 	y = walloftext(Text,screen)
 	meal(screen,y)
 	proceed(screen)
+
+def	Eatfood(screen):
+	Text = ["The crew eats a hearty meal after",
+			"a long day of sailing."]
+	y = walloftext(Text,screen)
+	meal(screen,y)
+	proceed(screen)
+
+def	Alcoffering(screen):
+	Text=["The crew spots an offering drifting",
+				"in the waves. There's likely alcohool",
+				"inside the barrel, but stealing it",
+				"may anger the spirits of the dead."]
+	y = walloftext(Text,screen)
+	choices = ["Drink the mead","Leave it alone"]
+	act = choose(choices,Text,screen)
+	if act == 1:
+		outc = random.randrange(10)
+		if outc >=5:
+			Text=["The crew pulls the offering barrel",
+					"aboard and drink the mead instead",
+					"of eating. They all have a great",
+					"time."]
+			walloftext(Text,screen)
+			for char in range(len(party)):
+					morale(char,1,screen,y)
+					y+=30
+		else:
+			Text=["The crew pulls the offering barrel",
+					"aboard and drink the mead instead",
+					"of eating. But when they're done",
+					"they hear a ghastly voice and",
+					"are really creeped out."] 
+			walloftext(Texto,screen)
+			for char in range(len(party)):
+					morale(char,-2,screen,y)
+					y+=30
+	else:
+		Text=["The crew try their best to ignore",
+				"the offering barrel as they eat",
+				"their dinner. Eventually, the barrel",
+				"is carried away by the ocean."]
+		meal(screen,y)
+	proceed(screen)
+
 
 def	Feast(screen):
 	party = Misc.Loadparty()
