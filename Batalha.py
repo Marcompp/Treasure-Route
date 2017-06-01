@@ -101,11 +101,22 @@ def damage(char,screen,y):
 	time.sleep(0.8)
 	Misc.Saveparty(party)
 
+def healhp(char,heal,screen,y):
+	party = Misc.Loadparty()
+	party[char]["hp"] += heal
+	#dmg sound
+	mes = "{0} recovered {1} hp!".format(party[char]["nome"],heal)
+	tex1 = game_font.render(mes, 1, (0, 150, 0))
+	screen.blit(tex1, (100, y))
+	pygame.display.update()
+	time.sleep(0.8)
+	Misc.Saveparty(party)
+
 def damagenemy(foes,enemy,dmg,screen,y,crit):
 	foes[enemy]["hp"] -= dmg
 	if foes[enemy]["hp"] <= 0:
 		#death sound
-		mes = "{0} was defeated!!!".format(party[char]["nome"])
+		mes = "{0} was defeated!!!".format(foes[enemy]["nome"])
 		if crit == 1: tex1 = game_font.render(mes, 1, (0, 0, 0))
 		if crit == 3: tex1 = game_font.render(mes, 1, (255, 0, 0))
 		party.remove(Foes[enemy])
@@ -125,9 +136,62 @@ def strike(Foes,enemy,char,screen):
 	crit = 1
 	if party[char]["skl"] >= hit:
 		if party[char]["mor"] >= random.randrange(10): crit = 3
-		dmg = (party[char]["skl"]-Foes[enemy]["def"])*crit
+		dmg = (party[char]["str"]-Foes[enemy]["def"])*crit
 		Foes = damagenemy(Foes,enemy,dmg,screen,60,crit)
+	else:
+		mes = "The attack missed!"
+		tex1 = game_font.render(mes, 1, (0, 0, 0))
+		screen.blit(tex1, (100, 60))
+		time.sleep(0.8)
+	time.sleep(0.8)
+	return Foes
 
+def shoot(Foes,enemy,char,screen):
+	party = Misc.Loadparty()
+	supply = Misc.Loadsupply()
+	if supply["arrow"] > 0:
+		supply["arrow"]-=1
+		hit = random.randrange(5)
+		crit = 1
+		if party[char]["skl"] >= hit:
+			if party[char]["mor"] >= random.randrange(10): crit = 3
+			dmg = (party[char]["skl"]+party[char]["skl"]-Foes[enemy]["def"])*crit
+			Foes = damagenemy(Foes,enemy,dmg,screen,60,crit)
+		else:
+			mes = "The attack missed!"
+			tex1 = game_font.render(mes, 1, (0, 0, 0))
+			screen.blit(tex1, (100, 60))
+			time.sleep(0.8)
+		time.sleep(0.8)
+	else:
+		mes = "You don't have any arrows!"
+		tex1 = game_font.render(mes, 1, (0, 0, 0))
+		screen.blit(tex1, (100, 60))
+		time.sleep(0.8)
+	Misc.Savesupply(supply)
+	time.sleep(0.8)
+	return Foes
+
+def shoot(Foes,healee,char,screen):
+	party = Misc.Loadparty()
+	supply = Misc.Loadsupply()
+	if party[char]["int"] == 10: need =0
+	elif party[char]["int"] >= 6: need =1
+	elif party[char]["int"] >= 4: need =2
+	elif party[char]["int"] >= 2: need =3
+	else: need =4
+	if supply["potion"] >= need:
+		supply["arrow"]-= need
+		healed = int(party[char]["int"]/3)
+		healhp(healee,healed,screen,60)
+		time.sleep(0.8)
+	else:
+		mes = "You don't have enough potions!"
+		tex1 = game_font.render(mes, 1, (0, 0, 0))
+		screen.blit(tex1, (100, 60))
+		time.sleep(0.8)
+	Misc.Savesupply(supply)
+	time.sleep(0.8)
 
 def blitenemies(foes,screen):
 	xpos = [255,100,450]
@@ -279,7 +343,9 @@ def battle(enemies,screen):
 		if Turn[0] =="play":
 			act = command(Turn[1],screen)
 			if act == 1 or act == 2:
-				choosenemy(Foes,screen)
+				target = choosenemy(Foes,screen)
 			elif act == 3:
-				chooseally(Foes,screen)
+				target = chooseally(Foes,screen)
+			if act ==1:
+				Foes =  strike(Foes,target,Turn[1],screen)
 		pygame.display.update()
