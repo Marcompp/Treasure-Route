@@ -45,6 +45,8 @@ def blitcards(screen):
 				screen.blit(nom, (22+x+z, 414+y))
 				stat = str(chars[a])
 				nom = game_font.render(stat, 1, (0, 0, 0))
+				if chars[a] <= 0:
+					nom = game_font.render(stat, 1, (255, 0, 0))
 				screen.blit(nom, (60+x+z, 414+y))
 				y += 29
 			z += 70
