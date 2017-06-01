@@ -15,16 +15,16 @@ def supply():
 	return pygame.image.load('supply.png').convert()
 
 def arrow():
-	return pygame.image.load('Arrow.png').convert()
+	return pygame.image.load('Arrow22.png').convert_alpha()
 
 def fish():
-	return pygame.image.load('Fish.png').convert()
+	return pygame.image.load('Fish.png').convert_alpha()
 
 def potion():
-	return pygame.image.load('Potion.png').convert()
+	return pygame.image.load('Potion.png').convert_alpha()
 
 def gold():
-	return pygame.image.load('Gold.png').convert()
+	return pygame.image.load('Gold2.png').convert_alpha()
 
 def card():
 	return pygame.image.load('card.png').convert()
@@ -76,7 +76,7 @@ def blitsupply(screen):
 	screen.blit(fish(), (cardx+5, cardy+5))
 	screen.blit(arrow(), (cardx+5, cardy+35))
 	screen.blit(potion(), (cardx+5, cardy+65))
-	screen.blit(gold(), (cardx+5, cardy+95))
+	screen.blit(gold(), (cardx+5, cardy+105))
 	supp = ["food", "arrows", "potions", "gold"]
 	y = 0
 	for a in supp:
@@ -119,7 +119,7 @@ def damagenemy(foes,enemy,dmg,screen,y,crit):
 		mes = "{0} was defeated!!!".format(foes[enemy]["nome"])
 		if crit == 1: tex1 = game_font.render(mes, 1, (0, 0, 0))
 		if crit == 3: tex1 = game_font.render(mes, 1, (255, 0, 0))
-		party.remove(Foes[enemy])
+		foes.remove(foes[enemy])
 	else:
 		#dmg sound
 		mes = "{0} took {1} damage!".format(foes[enemy]["nome"],dmg)
@@ -128,7 +128,26 @@ def damagenemy(foes,enemy,dmg,screen,y,crit):
 	screen.blit(tex1, (100, y))
 	pygame.display.update()
 	time.sleep(0.8)
+	return foes
+
+
+def ataak(Foes,enemy,char,screen):
+	mes = "{} attacks!".format(Foes[enemy]["nome"])
+	time.sleep(0.8)
+	tex1 = game_font.render(mes, 1, (0, 0, 0))
+	screen.blit(tex1, (100, 60))
+	party = Misc.Loadparty()
+	hit = random.randrange(10)
+	if Foes[enemy]["hit"] - party[char]["int"]/2>= hit:
+		damage(char,screen,90)
+	else:
+		mes = "The attack missed!"
+		tex1 = game_font.render(mes, 1, (0, 0, 0))
+		screen.blit(tex1, (100, 90))
+		time.sleep(0.8)
+	time.sleep(0.8)
 	return Foes
+
 
 def strike(Foes,enemy,char,screen):
 	party = Misc.Loadparty()
@@ -149,8 +168,8 @@ def strike(Foes,enemy,char,screen):
 def shoot(Foes,enemy,char,screen):
 	party = Misc.Loadparty()
 	supply = Misc.Loadsupply()
-	if supply["arrow"] > 0:
-		supply["arrow"]-=1
+	if supply["arrows"] > 0:
+		supply["arrows"]-=1
 		hit = random.randrange(5)
 		crit = 1
 		if party[char]["skl"] >= hit:
@@ -163,6 +182,9 @@ def shoot(Foes,enemy,char,screen):
 			screen.blit(tex1, (100, 60))
 			time.sleep(0.8)
 		time.sleep(0.8)
+		mes = "Used an arrow!"
+		tex1 = game_font.render(mes, 1, (255, 0, 0))
+		screen.blit(tex1, (100, 60))
 	else:
 		mes = "You don't have any arrows!"
 		tex1 = game_font.render(mes, 1, (0, 0, 0))
@@ -172,7 +194,7 @@ def shoot(Foes,enemy,char,screen):
 	time.sleep(0.8)
 	return Foes
 
-def shoot(Foes,healee,char,screen):
+def heal(healee,char,screen):
 	party = Misc.Loadparty()
 	supply = Misc.Loadsupply()
 	if party[char]["int"] == 10: need =0
@@ -180,11 +202,14 @@ def shoot(Foes,healee,char,screen):
 	elif party[char]["int"] >= 4: need =2
 	elif party[char]["int"] >= 2: need =3
 	else: need =4
-	if supply["potion"] >= need:
-		supply["arrow"]-= need
+	if supply["potions"] >= need:
+		supply["potions"]-= need
 		healed = int(party[char]["int"]/3)
 		healhp(healee,healed,screen,60)
 		time.sleep(0.8)
+		mes = "Used {} potions!".format(need)
+		tex1 = game_font.render(mes, 1, (255, 0, 0))
+		screen.blit(tex1, (100, 60))
 	else:
 		mes = "You don't have enough potions!"
 		tex1 = game_font.render(mes, 1, (0, 0, 0))
@@ -334,7 +359,7 @@ def battle(enemies,screen):
 	Turn = ["play",0]
 	for enemy in enemies:
 		Foes.append(Misc.Getenemy(enemy))
-	while True:
+	while len(Foes)>0:
 		Evento.endar()
 		screen.blit(Evento.paper(),(50,50))
 		blitcards(screen)
@@ -343,9 +368,22 @@ def battle(enemies,screen):
 		if Turn[0] =="play":
 			act = command(Turn[1],screen)
 			if act == 1 or act == 2:
-				target = choosenemy(Foes,screen)
+				target = choosenemy(Foes,screen)-1
 			elif act == 3:
-				target = chooseally(Foes,screen)
+				target = chooseally(Foes,screen)-1
 			if act ==1:
 				Foes =  strike(Foes,target,Turn[1],screen)
+			if act ==2:
+				Foes =  shoot(Foes,target,Turn[1],screen)
+			if act ==3:
+				heal(target,Turn[1],screen)
+			Turn[1] += 1
+			if Turn[1] >= len(Misc.Loadparty()):
+				Turn = ["enemy",0]
+		elif Turn[0] == "enemy":
+			target = random.randrange(len(Misc.Loadparty()))
+			ataak(Foes,Turn[1],target,screen)
+			Turn[1] += 1
+			if Turn[1] >= len(Foes):
+				Turn = ["play",0]
 		pygame.display.update()
