@@ -1,0 +1,23 @@
+{
+"Kraken":{
+	"img": "Kraken.png",
+	"nome": "Kraken", 
+	"hp": 70,
+	"hit": 9, 
+	"def": 6
+	},
+"Pirate":{
+	"img": "Pirate.png",
+	"nome": "Pirate", 
+	"hp": 12,
+	"hit": 5, 
+	"def": 3
+	},
+"Captain":{
+	"img": "Captain.png",
+	"nome": "Pirate Captain", 
+	"hp": 12,
+	"hit": 5, 
+	"def": 3
+	}
+}
