@@ -24,6 +24,8 @@ pygame.font.init()
 font_name = pygame.font.get_default_font()
 game_font = pygame.font.Font("Treamd.ttf", 30)
 
+pygame.mixer.init()
+
 def barco():
 	ship = Misc.Loadship()
 	image= pygame.image.load(ship["surface"]).convert_alpha()
@@ -53,6 +55,7 @@ paper = pygame.image.load('paper2.png').convert()
 pygame.display.set_caption('Pyga')
 clock = pygame.time.Clock()
 
+#CT.Mudar_musica("Calm.ogg")
 while True:
 	Evento.endar()
 	select = Menu.mainmenu(screen)
@@ -75,6 +78,7 @@ while True:
 		timeod = 0
 		progress = 0
 		nexev = 0
+		CT.Mudar_musica("musicapiratas.ogg")
 		while True:
 			ship = Misc.Loadship()#{"surface":1,"pos":35,"speed":3,"durability":10}
 			party = Misc.Loadparty()
