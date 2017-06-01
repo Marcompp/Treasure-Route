@@ -10,8 +10,8 @@ import json
 import Menu
 
 
-randevs=["Newspaper","TrainSkl","Castaway","Magicbo","Rowboat"]
-foodevs=["Eatfood","Eatfood","Eatfood","Feast","Alcoffering"]
+randevs=["Newspaper","TrainSkl","TrainStr","TrainInt","Castaway","Magicbo","Rowboat","Fishday"]
+foodevs=["Eatfood","Eatfood","Eatsup","Feast","Alcoffering"]
 ratievs=["Rationfood","Foodfight"]
 hungevs=["Cannibal","Starving"]
 despevs=["Suicide"]
@@ -57,7 +57,7 @@ while True:
 			pos = Misc.Loadpos()
 			story = Misc.Loadstory()
 		except ValueError:
-			newgame()
+			Menu.newgame(screen)
 		phase = 0
 		timeod = 0
 		progress = 0
@@ -86,7 +86,7 @@ while True:
 			if pos == 460:
 				getattr(Evento,Goal)(screen)
 
-			if timeod == 90:
+			elif timeod >= 90:
 				if supply["food"] >= len(party)*2:
 					getattr(Evento,foodevs[random.randrange(len(foodevs))])(screen)
 				elif supply["food"] != 0:
@@ -94,7 +94,7 @@ while True:
 				else:
 					getattr(Evento,hungevs[random.randrange(len(hungevs))])(screen)
 				timeod = 0
-			if nexev >=23:
+			elif nexev >=23:
 				x = random.randrange(1,9)
 				if x >= 5:
 					y = random.randrange(len(party))
