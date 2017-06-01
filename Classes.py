@@ -32,12 +32,7 @@ def sair():
                 pygame.quit()
                 sys.exit()
                 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_a]:
-            Som("dano.ogg")
-        if keys[pygame.K_s]:
-            Mudar_musica("musicapiratas.ogg")
-        
+
         
 def Nuvem_spawn(nuvem,Lista_Nuvem,largura,ymax,conta,screen,velocidade,tamanho_min,tamanho_max,chance):
         
@@ -73,8 +68,7 @@ def Nuvem_spawn(nuvem,Lista_Nuvem,largura,ymax,conta,screen,velocidade,tamanho_m
 
                 
 def Mudar_musica(Nova_musica):
-    pygame.mixer.quit()
-    pygame.mixer.init()
+    pygame.mixer.stop()
     musica = pygame.mixer.music.load(Nova_musica) 
     pygame.mixer.music.play(-1)              
                 
