@@ -21,6 +21,10 @@ def wordart():
 	imagem = pygame.image.load('Titulo.png')
 	return imagem
 
+def compass():
+	imagem = pygame.image.load('Bussola2.png')
+	return imagem
+
 def telatitulo():
 	dimensao = (640, 480)
 	imagem = pygame.image.load('initground.png').convert()
@@ -36,18 +40,20 @@ def endar():
 			exit()
 
 def mainmenu(screen):
-	lag =0
+	lag =5
 	cursor = 1
 	clock = pygame.time.Clock()
 	while True:
 		endar()
 		posx = 40
 		screen.blit(telatitulo(),(0,0))
+		screen.blit(wordart(),(140,10))
+		screen.blit(compass(),(210,175))
 		posy = 215
 		options = ["Continue","New Game","Credits"]
 		y =0
 		for tex in options:
-			tex1 = game_font.render(tex, 1, (0, 100, 80))
+			tex1 = game_font.render(tex, 1, (0, 0, 0))
 			screen.blit(tex1, (posx,posy+y))
 			y += letter
 
@@ -84,6 +90,6 @@ def mainmenu(screen):
 def newgame(screen):
 	char = Misc.Charlist()
 	supply = {"food": 20, "arrows": 0, "potions": 10, "gold": 5}
-	boat = {"surface": 1, "pos": 335, "speed": 3, "durability": 10}
+	boat = {"surface": "Barco.png", "pos": 335, "speed": 3, "durability": 10}
 	pos = 20
 	Misc.Save([char["Mayara"],char["Juju"]],supply,boat,pos,["Mayara","Juju"])

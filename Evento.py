@@ -212,7 +212,14 @@ def charjoin(char,screen,y):
 		Misc.Savestory(story)
 
 
-
+def	Battletest(screen):
+	Text = ["The boat is set upon by a pirate",
+			"ship. A single pirate manages to",
+			"get on board and attacks the crew!"]
+	y = walloftext(Text,screen)
+	proceed(screen)
+	Batalha.battle(["Pirate"],screen)
+	proceed(screen)
 
 
 
@@ -248,7 +255,7 @@ def TrainInt(screen):
 						"book very helpful while it lasts."]
 	y =60
 	y = walloftext(text,screen)
-	statup(char,"skl",screen,y)
+	statup(char,"int",screen,y)
 	proceed(screen)
 
 def TrainSkl(screen):
@@ -523,7 +530,7 @@ def Fishday(screen):
 			getsupply("food",9,screen,y)
 			proceed(screen)
 		elif fish >= 4:
-			Text = ["{} casts out the fishing rod and",
+			Text = ["{} casts out the fishing rod and".format(party[char]["nome"]),
 							"waits until finally getting a bite.",
 							"They are able to catch a medion sized",
 							"fish, before the rod snaps."]
@@ -531,7 +538,7 @@ def Fishday(screen):
 			getsupply("food",5,screen,y)
 			proceed(screen)
 		elif fish >= 2:
-			Text = ["{} casts out the fishing rod and",
+			Text = ["{} casts out the fishing rod and".format(party[char]["nome"]),
 							"waits until finally getting a bite.",
 							"After a long struggle, they pull up",
 							"a tiny, pathetic fish at the cost",
