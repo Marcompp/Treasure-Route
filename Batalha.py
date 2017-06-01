@@ -34,9 +34,16 @@ def blitcards(screen):
 	x =0
 	stats = [["str","skl"],["int","mor"]]
 	for chars in partyy:
-		screen.blit(card(), (12+x, 350))
+		screen.blit(card(), (12+x, 351))
 		nom = game_font.render(chars["nome"], 1, (0, 0, 0))
 		screen.blit(nom, (48+x, 360))
+		ph = game_font.render("hp:", 1, (0, 0, 0))
+		screen.blit(ph, (52+x, 388))
+		if chars["hp"]>=5:
+			hpp = game_font.render(str(chars["hp"]), 1, (0, 100, 0))
+		else:
+			hpp = game_font.render(str(chars["hp"]), 1, (255, 0, 0))
+		screen.blit(hpp, (85+x, 388))
 		z = 0
 		for v in stats:
 			y =0
@@ -47,7 +54,13 @@ def blitcards(screen):
 				nom = game_font.render(stat, 1, (0, 0, 0))
 				if chars[a] <= 0:
 					nom = game_font.render(stat, 1, (255, 0, 0))
-				screen.blit(nom, (60+x+z, 414+y))
+				if a == "mor":
+					m = 5
+					if chars[a] >= 5: nom = game_font.render(stat, 1, (0, 100, 0))
+				else:
+					m = 0
+					if chars[a] >= 10: nom = game_font.render(stat, 1, (0, 100, 0))
+				screen.blit(nom, (60+m+x+z, 414+y))
 				y += 29
 			z += 70
 		x += 152

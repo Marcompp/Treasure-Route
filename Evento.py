@@ -242,7 +242,7 @@ def TrainInt(screen):
 						"reads it front to back, but is only",
 						"able to understand a little before",
 						"the book is destroyed."]
-		if out == 2:
+	if out == 2:
 		text = ["The book turns out to be a math book",
 						"for children. {} finds the".format(party[char]["nome"]),
 						"book very helpful while it lasts."]
@@ -275,6 +275,33 @@ def TrainSkl(screen):
 		slowblit(c,screen,y)
 		y +=30
 	statup(char,"skl",screen,y)
+	proceed(screen)
+
+def TrainStr(screen):
+	party = Misc.Loadparty()
+	Text = ["The crew produces some dumbells",
+			"out of fish bones and sticks so they", 
+			"can get fit.", 
+			"",
+			"Who should try lifting first?"]
+	y=60
+	y = walloftext(Text,screen)
+	choices = []
+	chari = charchoose(choices,Text,screen)
+	char = chari-1
+	out = random.randint(0,1)
+	if out == 0:
+		text = ["{} gets some lifting in before".format(party[char]["nome"]), "before the dumbells just fall apart.",
+						"Who would've though making fitness","equipment out of fish bones and sticks","was a bad idea?"]
+	if out == 1:
+		text = ["{} doesn't seem to grasp the concept".format(party[char]["nome"]),"of lifting weight, and instead uses all",
+				"their power to throw the dumbells as","as far as they can and into the sea."]
+	y =60
+	screen.blit(paper(),(50,50))
+	for c in text:
+		slowblit(c,screen,y)
+		y +=30
+	statup(char,"str",screen,y)
 	proceed(screen)
 
 def Rowboat(screen):
@@ -355,7 +382,7 @@ def Magicbo(screen):
 			"",
 			"What should you train?"]
 	y = walloftext(Text,screen)
-	choices = ["Strength","Skill","Intelligence"]
+	choices = ["Strength","Intelligence","Skill"]
 	a = choose(choices,Text,screen)
 	screen.blit(paper(),(50,50))
 	if a == 1:
@@ -363,12 +390,12 @@ def Magicbo(screen):
 		Text = ["Bo runs the party through a",
 				"fabulous weight lifting routine.", 
 				"They'll be buff as a bull in no time!"]
-	elif a == 2:
+	elif a == 3:
 		stat = "skl"
 		Text = ["With Bo's help, the party trains",
 				"until they can each balance two", 
 				"swords on their noses."]
-	elif a == 3:
+	elif a == 2:
 		stat = "int"
 		Text = ["Bo hands the party a challenging",
 				"yet interesting crossword puzzle.", 
@@ -459,6 +486,92 @@ def Newspaper(screen):
 		y = walloftext(Text,screen)
 	proceed(screen)
 
+def Fishday(screen):
+	party = Misc.Loadparty()
+	Text = ["The crew decides to make a stop",
+					"to do some fishing.",
+					""
+					"They could either try and fish using a",
+					"makeshift fishing rod or try to set up",
+					"some fish nets."]
+	y = walloftext(Text,screen)
+	choices = ["Use fishing rod","Use fish net"]
+	met = choose(choices,Text,screen)
+	fish = random.randrange(9)
+	choices = []
+	if met ==1:
+		Text = ["Who should try their hand at fishing?",
+						"A strong and stead hand is essential."]
+		y = walloftext(Text,screen)
+		char = charchoose(choices,Text,screen)-1
+		if fish >= party[char]["str"]:
+			Text = ["{} casts out the fishing rod and".format(party[char]["nome"]),
+							"waits until finally getting a bite.",
+							"Unfortunately the fish is to strong",
+							"for {} and they let go of the".format(party[char]["nome"]),
+							"fishing rod, losing it."]
+			y = walloftext(Text,screen)
+			proceed(screen)
+		elif fish >= 7:
+			Text = ["{} casts out the fishing rod and".format(party[char]["nome"]),
+							"waits until finally getting a bite.",
+							"The fish who took the bait is",
+							"gigantic and way too strong, but",
+							"{} is able to pull it aboard,".format(party[char]["nome"]),
+							"breaking the fishing rod in the process."]
+			y = walloftext(Text,screen)
+			getsupply("food",9,screen,y)
+			proceed(screen)
+		elif fish >= 4:
+			Text = ["{} casts out the fishing rod and",
+							"waits until finally getting a bite.",
+							"They are able to catch a medion sized",
+							"fish, before the rod snaps."]
+			y = walloftext(Text,screen)
+			getsupply("food",5,screen,y)
+			proceed(screen)
+		elif fish >= 2:
+			Text = ["{} casts out the fishing rod and",
+							"waits until finally getting a bite.",
+							"After a long struggle, they pull up",
+							"a tiny, pathetic fish at the cost",
+							"of the fishing rod."]
+			y = walloftext(Text,screen)
+			getsupply("food",2,screen,y)
+			proceed(screen)
+		else:
+			Text = ["{} casts out the fishing rod and",
+							"waits for a long time, but no fish",
+							"ever show up.",
+							"Maybe using an old boot as bait was",
+							"a bad idea?"]
+			y = walloftext(Text,screen)
+			proceed(screen)
+	elif met ==2:
+		Text = ["Who should try set up the fish net?",
+						"Precision and the ability to make", "cool knots are essential."]
+		y = walloftext(Text,screen)
+		char = charchoose(choices,Text,screen)-1
+		if fish >= party[char]["skl"]:
+			Text = ["{} sets up the fish net with care,".format(party[char]["nome"]),
+							"But its ripped when they come back",
+							"to check on it..."]
+			y = walloftext(Text,screen)
+			proceed(screen)
+		elif fish >= 2:
+			Text = ["{} casts out the fishing net and",
+							"manages to catch a whole bunch of",
+							"fish with it."]
+			y = walloftext(Text,screen)
+			getsupply("food",6,screen,y)
+			proceed(screen)
+		else:
+			Text = ["{} sets up the fishing net, but",
+							"it never manages to catch a single",
+							"fish even after being cast out",
+							"for a long time."]
+			y = walloftext(Text,screen)
+			proceed(screen)
 
 def Suicide(char,screen):
 	party = Misc.Loadparty()
@@ -479,9 +592,9 @@ def Suicide(char,screen):
 				y = walloftext(Text,screen)
 				morale(char,2,screen,y)
 			elif outco>=3:
-				Text = ["{} decides to go through with",
+				Text = ["{} decides to go through with".format(party[char]["nome"]),
 							"it despite their crewmates' pleas.",
-							"But the rope they use to hang"
+							"But the rope they use to hang",
 							"themselves is rotten and breaks",
 							"halfway through the attempt."]
 				y = walloftext(Text,screen)
@@ -522,6 +635,7 @@ def Suicide(char,screen):
 							"making them care."]
 				y = walloftext(Text,screen)
 	else:
+		proceed(screen)
 		Text = ["{} attempts suicide by hanging".format(party[char]["nome"]),
 				"but the rope they used was rotted",
 				"and snapped.",
@@ -538,15 +652,15 @@ def	Eatfood(screen):
 	meal(screen,y)
 	proceed(screen)
 
-def	Eatfood(screen):
-	Text = ["The crew eats a hearty meal after",
-			"a long day of sailing."]
+def	Eatsup(screen):
+	Text = ["The crew eats some of their food",
+			"supplies at the end of the day."]
 	y = walloftext(Text,screen)
 	meal(screen,y)
 	proceed(screen)
 
 def	Alcoffering(screen):
-	Text=["The crew spots an offering drifting",
+	Text=["The crew spots an offering barrel drifting",
 				"in the waves. There's likely alcohool",
 				"inside the barrel, but stealing it",
 				"may anger the spirits of the dead."]
@@ -570,7 +684,7 @@ def	Alcoffering(screen):
 					"of eating. But when they're done",
 					"they hear a ghastly voice and",
 					"are really creeped out."] 
-			walloftext(Texto,screen)
+			walloftext(Text,screen)
 			for char in range(len(party)):
 					morale(char,-2,screen,y)
 					y+=30
@@ -579,6 +693,7 @@ def	Alcoffering(screen):
 				"the offering barrel as they eat",
 				"their dinner. Eventually, the barrel",
 				"is carried away by the ocean."]
+		walloftext(Text,screen)
 		meal(screen,y)
 	proceed(screen)
 
@@ -713,6 +828,7 @@ def Cannibal(screen):
 		Text = ["Mad from the hunger, the party decides",
 			"to cannibalise someone. Who should",
 			"be eaten first?"]
+		y = walloftext(Text,screen)
 		choices = []
 		char = charchoose(choices,Text,screen)
 		char -=1
