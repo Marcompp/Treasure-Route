@@ -8,7 +8,7 @@ import Batalha
 import Misc
 import json
 import Menu
-
+import Classes as CT
 
 randevs=["Newspaper","TrainSkl","TrainStr","TrainInt","Castaway","Magicbo","Rowboat","Fishday"]
 foodevs=["Eatfood","Eatfood","Eatsup","Feast","Alcoffering"]
@@ -24,13 +24,23 @@ pygame.font.init()
 font_name = pygame.font.get_default_font()
 game_font = pygame.font.Font("Treamd.ttf", 30)
 
+def barco():
+	ship = Misc.Loadship()
+	image= pygame.image.load(ship["surface"]).convert_alpha()
+	return pygame.transform.rotate(image,10)
 
 #start pygame
 screen = pygame.display.set_mode((640, 480), 0, 32)
 
+Nuvem_filename = 'Nuvem.png'
+Nuvem = pygame.image.load(Nuvem_filename).convert_alpha()
 
-background_filename = 'Mar proto.png'
-background = pygame.image.load(background_filename).convert()
+Sol_filename = 'Sol.png'
+Sol = pygame.image.load(Sol_filename).convert_alpha()
+Sol = pygame.transform.scale(Sol,(140,120))
+
+mar_filename = 'mar.png'
+mar = pygame.image.load(mar_filename).convert_alpha()
 
 goal_filename = "Goal.png"
 goal = pygame.image.load(goal_filename).convert_alpha()
@@ -58,6 +68,9 @@ while True:
 			story = Misc.Loadstory()
 		except ValueError:
 			Menu.newgame(screen)
+		Lista_Nuvem = [{"imagem":Nuvem,"y": 0,"x": -120,"tamanho":300},{"imagem":Nuvem,"y": 30,"x": 200,"tamanho":300},{"imagem":Nuvem,"y": 5,"x": 440,"tamanho":300}]
+		contador =0
+		conta = 0
 		phase = 0
 		timeod = 0
 		progress = 0
@@ -71,22 +84,39 @@ while True:
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					exit()
-			screen.blit(background, (0, 0))
+
+			screen.fill((20,160,200))
+
+			w,h = pygame.display.get_surface().get_size()
+			
+			screen.blit(Sol,(w-250,50))
+			CT.Nuvem_spawn(Nuvem,Lista_Nuvem,w,20,conta,screen,2.5,100,300,5000)
+
+			contador = CT.Mar(barco(),mar,contador,screen,w,h,Sol)
+
 			#screen.blit(indicator,(ship["pos"],10))
 			screen.blit(goal,(465,15))
+			for x in range (1, 17):
+				pygame.draw.line(screen,(255,0,0),(x*28,26),(x*28+20,26),3)
 			#screen.blit(linha, 20,20)
 			screen.blit(indicator,(pos,10))
 
 			Batalha.blitcards(screen)
 			Batalha.blitsupply(screen)
 
-			if progress == 20:
+			wait = 3
+
+
+			if pos >= 0:
+				getattr(Evento,"Battletest")(screen)
+
+			if progress == 20*wait:
 				pos += ship["speed"]
 				progress = 0
 			if pos == 460:
 				getattr(Evento,Goal)(screen)
 
-			elif timeod >= 90:
+			elif timeod >= 90*wait:
 				if supply["food"] >= len(party)*2:
 					getattr(Evento,foodevs[random.randrange(len(foodevs))])(screen)
 				elif supply["food"] != 0:
@@ -94,7 +124,7 @@ while True:
 				else:
 					getattr(Evento,hungevs[random.randrange(len(hungevs))])(screen)
 				timeod = 0
-			elif nexev >=23:
+			elif nexev >=24*wait:
 				x = random.randrange(1,9)
 				if x >= 5:
 					y = random.randrange(len(party))

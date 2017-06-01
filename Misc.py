@@ -12,6 +12,10 @@ def Save(party,supply,ship,position,story):
 	with open("Save.json", "w") as Arq:
 		json.dump(Sav,Arq)
 
+def Getenemy(enemy):
+	with open("enemy.json", "r") as Enn:
+		ini = json.load(Enn)
+	return ini[enemy]
 
 def Charlist():
 	with open("chars.json", "r") as Arq:

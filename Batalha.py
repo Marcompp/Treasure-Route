@@ -29,6 +29,9 @@ def gold():
 def card():
 	return pygame.image.load('card.png').convert()
 
+def slot():
+	return pygame.transform.scale(card(),(130,100))
+
 def blitcards(screen):
 	partyy = Misc.Loadparty()
 	x =0
@@ -97,3 +100,186 @@ def damage(char,screen,y):
 	pygame.display.update()
 	time.sleep(0.8)
 	Misc.Saveparty(party)
+
+def damagenemy(foes,enemy,dmg,screen,y,crit):
+	foes[enemy]["hp"] -= dmg
+	if foes[enemy]["hp"] <= 0:
+		#death sound
+		mes = "{0} was defeated!!!".format(party[char]["nome"])
+		if crit == 1: tex1 = game_font.render(mes, 1, (0, 0, 0))
+		if crit == 3: tex1 = game_font.render(mes, 1, (255, 0, 0))
+		party.remove(Foes[enemy])
+	else:
+		#dmg sound
+		mes = "{0} took {1} damage!".format(foes[enemy]["nome"],dmg)
+		if crit == 1: tex1 = game_font.render(mes, 1, (0, 0, 0))
+		if crit == 3: tex1 = game_font.render(mes, 1, (255, 0, 0))
+	screen.blit(tex1, (100, y))
+	pygame.display.update()
+	time.sleep(0.8)
+	return Foes
+
+def strike(Foes,enemy,char,screen):
+	party = Misc.Loadparty()
+	hit = random.randrange(5)
+	crit = 1
+	if party[char]["skl"] >= hit:
+		if party[char]["mor"] >= random.randrange(10): crit = 3
+		dmg = (party[char]["skl"]-Foes[enemy]["def"])*crit
+		Foes = damagenemy(Foes,enemy,dmg,screen,60,crit)
+
+
+def blitenemies(foes,screen):
+	xpos = [255,100,450]
+	ypos = [120,100,100]
+	for enemy in range(len(foes)):
+		imag= pygame.image.load(foes[enemy]["img"]).convert_alpha()
+		screen.blit(imag,(xpos[enemy],ypos[enemy]))
+
+
+def command(char,screen):
+	x = 152 * char
+	lag = 3
+	cursor = 1
+	clock = pygame.time.Clock()
+	while True:
+		Evento.endar()
+		screen.blit(slot(), (22+x, 251))
+		options = ["Strike","Shoot","Heal"]
+		y = 0
+		for test in options:
+			tex1 = game_font.render(test, 1, (0, 0, 0))
+			screen.blit(tex1,(47+x, 258+y))
+			y += 30
+		pressed_keys = pygame.key.get_pressed()
+		if lag >=5:
+			if pressed_keys[K_UP]:
+				cursor -=1
+				lag = 0
+			elif pressed_keys[K_DOWN]:
+				cursor +=1
+				lag = 0
+			elif pressed_keys[K_LEFT]:
+				cursor -=1
+				lag = 0
+			elif pressed_keys[K_RIGHT]:
+				cursor +=1
+				lag = 0
+			elif pressed_keys[K_SPACE]:
+				return cursor
+		if cursor > len(options):
+			cursor = 1
+		if cursor <=0:
+			cursor = len(options)
+		if cursor == 1:
+			screen.blit(Evento.arrow(), (32+x,253))
+		elif cursor == 2:
+			screen.blit(Evento.arrow(), (32+x,253+30))
+		elif cursor == 3:
+			screen.blit(Evento.arrow(), (32+x,253+60))
+		lag+=1
+		pygame.display.update()
+		time_passed = clock.tick(30)
+
+def choosenemy(foes,screen):
+	lag = 3
+	cursor = 1
+	clock = pygame.time.Clock()
+	while True:
+		Evento.endar()
+		screen.blit(Evento.paper(),(50,50))
+		blitcards(screen)
+		blitsupply(screen)
+		blitenemies(foes,screen)
+		pressed_keys = pygame.key.get_pressed()
+		if lag >=5:
+			if pressed_keys[K_UP]:
+				cursor -=1
+				lag = 0
+			elif pressed_keys[K_DOWN]:
+				cursor +=1
+				lag = 0
+			elif pressed_keys[K_LEFT]:
+				cursor +=1
+				lag = 0
+			elif pressed_keys[K_RIGHT]:
+				cursor -=1
+				lag = 0
+			elif pressed_keys[K_SPACE]:
+				return cursor
+		if cursor > len(foes):
+			cursor = 1
+		if cursor <=0:
+			cursor = len(foes)
+		if cursor == 1:
+			screen.blit(Evento.arrow(), (260,120))
+		elif cursor == 2:
+			screen.blit(Evento.arrow(), (105,100))
+		elif cursor == 3:
+			screen.blit(Evento.arrow(), (455,100))
+		lag+=1
+		pygame.display.update()
+		time_passed = clock.tick(30)
+
+def chooseally(foes,screen):
+	party = Misc.Loadparty()
+	lag = 3
+	cursor = 1
+	clock = pygame.time.Clock()
+	while True:
+		Evento.endar()
+		screen.blit(Evento.paper(),(50,50))
+		blitcards(screen)
+		blitsupply(screen)
+		blitenemies(foes,screen)
+		pressed_keys = pygame.key.get_pressed()
+		if lag >=5:
+			if pressed_keys[K_UP]:
+				cursor -=1
+				lag = 0
+			elif pressed_keys[K_DOWN]:
+				cursor +=1
+				lag = 0
+			elif pressed_keys[K_LEFT]:
+				cursor -=1
+				lag = 0
+			elif pressed_keys[K_RIGHT]:
+				cursor +=1
+				lag = 0
+			elif pressed_keys[K_SPACE]:
+				return cursor
+		if cursor > len(party):
+			cursor = 1
+		if cursor <=0:
+			cursor = len(party)
+		if cursor == 1:
+			screen.blit(Evento.arrow(), (33,355))
+		elif cursor == 2:
+			screen.blit(Evento.arrow(), (33+152,355))
+		elif cursor == 3:
+			screen.blit(Evento.arrow(), (33+152+152,355))
+		elif cursor == 4:
+			screen.blit(Evento.arrow(), (33+152+152+152,355))
+		lag+=1
+		pygame.display.update()
+		time_passed = clock.tick(30)
+
+
+def battle(enemies,screen):
+	Foes =[]
+	Turn = ["play",0]
+	for enemy in enemies:
+		Foes.append(Misc.Getenemy(enemy))
+	while True:
+		Evento.endar()
+		screen.blit(Evento.paper(),(50,50))
+		blitcards(screen)
+		blitsupply(screen)
+		blitenemies(Foes,screen)
+		if Turn[0] =="play":
+			act = command(Turn[1],screen)
+			if act == 1 or act == 2:
+				choosenemy(Foes,screen)
+			elif act == 3:
+				chooseally(Foes,screen)
+		pygame.display.update()
