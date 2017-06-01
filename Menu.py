@@ -17,6 +17,10 @@ pygame.font.init()
 font_name = pygame.font.get_default_font()
 game_font = pygame.font.Font("Treamd.ttf", letter)
 
+def wordart():
+	imagem = pygame.image.load('Titulo.png')
+	return imagem
+
 def telatitulo():
 	dimensao = (640, 480)
 	imagem = pygame.image.load('initground.png').convert()
@@ -43,7 +47,7 @@ def mainmenu(screen):
 		options = ["Continue","New Game","Credits"]
 		y =0
 		for tex in options:
-			tex1 = game_font.render(tex, 1, (0, 0, 0))
+			tex1 = game_font.render(tex, 1, (0, 100, 80))
 			screen.blit(tex1, (posx,posy+y))
 			y += letter
 
