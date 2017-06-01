@@ -19,7 +19,7 @@ def paper():
 	return pygame.image.load('paper2.png').convert()
 
 def arrow():
-	return pygame.image.load('indic2.png').convert()
+	return pygame.image.load('indic2.png')
 
 def endar():
 	for event in pygame.event.get():
@@ -216,6 +216,40 @@ def charjoin(char,screen,y):
 
 
 
+def TrainInt(screen):
+	party = Misc.Loadparty()
+	Text = ["The crew finds a small box floating",
+			"in the ocean. Inside is a book,", 
+			"badly damaged by the water. It", 
+			"looks to be a very rare volume.",
+			"",
+			"Who should try and read it?"]
+	y=60
+	y = walloftext(Text,screen)
+	choices = []
+	chari = charchoose(choices,Text,screen)
+	char = chari-1
+	out = random.randint(0,2)
+	if out == 0:
+		text = ["The book turns out to be a 'How To'",
+						"guide on how to follow the stars.",
+						"{} absorbs as much knowledge as they".format(party[char]["nome"]),
+						"can before the book falls apart."]
+	if out == 1:
+		text = ["The book is an extremely rare copy",
+						"of 'Basic Calculus for Dummies' by",
+						"Carlon the Matemagician. {}".format(party[char]["nome"]),
+						"reads it front to back, but is only",
+						"able to understand a little before",
+						"the book is destroyed."]
+		if out == 2:
+		text = ["The book turns out to be a math book",
+						"for children. {} finds the".format(party[char]["nome"]),
+						"book very helpful while it lasts."]
+	y =60
+	y = walloftext(text,screen)
+	statup(char,"skl",screen,y)
+	proceed(screen)
 
 def TrainSkl(screen):
 	party = Misc.Loadparty()
@@ -256,8 +290,9 @@ def Rowboat(screen):
 			Text = ["A small rowboat appears in the horizon.",
 							"It looks to be empty at first, but as it", 
 							"gets closer the crew can see there's a", 
-							"box with some gold in it. Maybe someone saved",
-							"their belongings before saving themselves?."]
+							"box with some gold in it. Maybe someone",
+							"saved their belongings before",
+							"saving themselves?."]
 			y = walloftext(Text,screen)
 			getsupply("gold",2,screen,y)
 			proceed(screen)
@@ -600,6 +635,7 @@ def	Feast(screen):
 					"and the wisdom of the sea."]
 				y = walloftext(Text,screen)
 				statup(learner,"int",screen,y)
+				y += 30
 			elif out < 9:
 				Text = ["{0} recounts the story of the".format(party[char1]["nome"]),
 					"gigantic fish he once almost caught.",
