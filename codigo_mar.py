@@ -1,6 +1,6 @@
 import pygame, sys
-
-
+import Classes as CT
+from random import randint
 pygame.init()
 check = 0
 contador = 0
@@ -14,47 +14,34 @@ i = 0
 clock = pygame.time.Clock()
 barco = pygame.image.load("Barco.png")
 Mar_img = pygame.image.load("mar.png")
-Nuvem = pygame.image.load("nuvem.png")
+nuvem = pygame.image.load("nuvem.png")
+Sol = pygame.image.load("Sol.png")
+Sol = pygame.transform.scale(Sol,(160,140))
+Lista_Nuvem = []
 
-
+conta = 0
 
 FPS = 30
 
 while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    i += 5
-    if i > 255:
-       i = 0
-    screen.fill((0,200,255))
+    CT.sair()
+    
+
+    screen.fill((20,160,200))
+    
     
     #pygame.draw.line(screen, clr2, (0,0),(640,360),5)
     #pygame.draw.rect(screen,clr3,(40,40,300,45))
     #pygame.draw.circle(screen,clr1,(350,200),80,40)
     
     
-    screen.blit(Nuvem,(100,50))
+    contador = CT.Mar(barco,Mar_img,contador,screen,largura,altura,Sol)
     
-    h = -40
-    contador+=1
-    if contador<30:
+    CT.Nuvem_spawn(nuvem,Lista_Nuvem,largura,150,conta,screen,0.5,100,300,10000)
+    
+    
         
-        while h != 200:
-            screen.blit(Mar_img,(0,h))
-            h+=  30
-        screen.blit(barco,(largura/8,altura/8+30))
-       
-        
-    else:
-        while h != 200:
-            screen.blit(Mar_img,(-40,h))
-            h+=  30
-        screen.blit(barco,(largura/8,altura/8+40))
-        if contador == 60:
-            contador = 0
-  
+
     
     pygame.display.flip()
     
