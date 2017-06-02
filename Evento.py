@@ -766,11 +766,11 @@ def Pullweight(char,screen):
 							"to turn over a new leaf, {}".format(party[char]["nome"]),
 							"tosses away most of their stuff."]
 			y = walloftext(Text,screen)
-			supply = Loadsupply()
+			supply = Misc.Loadsupply()
 			sups = ["arrows","potions"]
 			for a in sups:
 				many = int(supply[a]/2)
-				losesupply("arrow",many,screen,y)
+				losesupply(a,many,screen,y)
 				y+=30
 			morale(char,2,screen,y)
 	proceed(screen)
