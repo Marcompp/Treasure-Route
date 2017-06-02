@@ -256,7 +256,51 @@ def Newgame(screen):
 	proceed(screen)
 
 
+def Goal(screen):
+	Text = ["After enduring many, many, many hardships,",
+	"the crew finally arrives at Blue Pearl",
+	"Island, where Howell D'Or's treasure is",
+	"said to rest. It they find it, they should",
+	"have enough gold to buy a kingdom."]
+	y = walloftext(Text,screen)
+	proceed(screen)
 
+	Text = ["The crew uses everything they learned up",
+	"until this point to find the treasure",
+	"chest's hiding place."]
+	y = walloftext(Text,screen)
+	proceed(screen)
+
+	Text = ["Expectation builds as they open it."]
+	y = walloftext(Text,screen)
+	proceed(screen)
+
+	Text = ["Inside is... a straw hat alongside",
+	"a note. It said some rubbish about the",
+	"adventure to get here and your companions",
+	"on this journey being the real treasure",
+	"and, at the very end of the note, it was",
+	"written: 'PS. I don't actually have gold'"]
+	y = walloftext(Text,screen)
+	proceed(screen)
+	Text = ["The crew is disappointed to say the",
+	"least, but when they think of what to",
+	"do next, they don't even consider going",
+	"back the way they came, so instead, they",
+	"decide to settle down on the island."]
+	y = walloftext(Text,screen)
+	proceed(screen)
+	Text = ["Years later, their little settlement",
+	"grew to become a great kingdom.",
+	"Though they did not get enough",
+	"gold to buy a kingdom, they did get",
+	"a kingdom in the end.",
+	"Too bad none of them lived to see it."]
+	y = walloftext(Text,screen)
+	proceed(screen)
+	Text = "THE END"
+	y = walloftext(Text,screen)
+	proceed(screen)
 
 def TrainInt(screen):
 	party = Misc.Loadparty()

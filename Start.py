@@ -84,8 +84,11 @@ while True:
 		timeod = 0
 		progress = 0
 		nexev = 0
+		if "GameO" in story:
+			Menu.newgame(screen)
+
 		CT.Mudar_musica("musicapiratas.ogg")
-		while True:
+		while "GameO" not in story:
 			ship = Misc.Loadship()#{"surface":1,"pos":35,"speed":3,"durability":10}
 			party = Misc.Loadparty()
 			supply = Misc.Loadsupply()
@@ -111,15 +114,17 @@ while True:
 			#screen.blit(linha, 20,20)
 			screen.blit(indicator,(pos,10))
 
-			if party == []:
-				Gameover(screen)
-				select = 0
-				break
-
 			Batalha.blitcards(screen)
 			Batalha.blitsupply(screen)
 
 			wait = 3
+
+			if party == []:
+				Gameover(screen)
+				select = 0
+				story.append("GameO")
+				Misc.Savestory(story)
+				break
 
 			if progress == 20*wait:
 				pos += ship["speed"]
@@ -129,8 +134,11 @@ while True:
 				Evento.Newgame(screen)
 				story.append("NG")
 				Misc.Savestory(story)
-			elif pos == 460:
-				getattr(Evento,Goal)(screen)
+			elif pos >= 460:
+				getattr(Evento,"Goal")(screen)
+				story.append("GameO")
+				Misc.Savestory(story)
+				break
 
 			elif timeod >= 90*wait:
 				if supply["food"] >= len(party)*2:
@@ -157,6 +165,7 @@ while True:
 			#Misc.Save(party,supply,ship,pos,story)
 			pygame.display.update()
 			time_passed = clock.tick(30)
+		CT.Mudar_musica("Calm.ogg")
 	if select ==3:
 		Text=["Programming, writing and design - Marco",
 			"Programing and graphics design - Juliano",

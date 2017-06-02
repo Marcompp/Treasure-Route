@@ -58,7 +58,7 @@ def mainmenu(screen):
 			y += letter
 
 		pressed_keys = pygame.key.get_pressed()
-		if lag >=5:
+		if lag >=3:
 			if pressed_keys[K_UP]:
 				cursor -=1
 				lag = 0
