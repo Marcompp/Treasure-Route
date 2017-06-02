@@ -14,7 +14,7 @@ randevs=["Newspaper","TrainSkl","TrainStr","TrainInt","Castaway","Magicbo","Rowb
 foodevs=["Eatfood","Eatfood","Eatsup","Feast","Alcoffering"]
 ratievs=["Rationfood","Foodfight"]
 hungevs=["Cannibal","Starving"]
-despevs=["Suicide"]
+despevs=["Suicide","Pullweight"]
 locaevs=["Carthusport","BrigandIsles"]
 
 #fonte
@@ -35,7 +35,7 @@ def Gameover(screen):
 	Text = ["No one survived to claim Howell",
 			"D'Or's treasure. Too bad."]
 	y = Evento.walloftext(Text,screen)
-	proceed()
+	Evento.proceed(screen)
 
 #start pygame
 screen = pygame.display.set_mode((640, 480), 0, 32)
@@ -58,7 +58,7 @@ indicator = pygame.image.load(ind_filename).convert_alpha()
 
 paper = pygame.image.load('paper2.png').convert()
 
-pygame.display.set_caption('Pyga')
+pygame.display.set_caption('Treasure Route')
 clock = pygame.time.Clock()
 
 CT.Mudar_musica("Calm.ogg")
@@ -112,7 +112,8 @@ while True:
 			screen.blit(indicator,(pos,10))
 
 			if party == []:
-				Gameover()
+				Gameover(screen)
+				select = 0
 				break
 
 			Batalha.blitcards(screen)

@@ -242,8 +242,8 @@ def Newgame(screen):
 					"behind by the pirate king",
 					"Howell D'Or, said contain enough",
 					"gold to buy an entire kingdon,",
-					"decides to go after it. She talks"
-					"her childhood friend Juju into it,"
+					"decides to go after it. She talks",
+					"her childhood friend Juju into it,",
 					"and sets sail into the sea!"]
 	y = walloftext(Text,screen)
 	proceed(screen)
