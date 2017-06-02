@@ -31,6 +31,12 @@ def barco():
 	image= pygame.image.load(ship["surface"]).convert_alpha()
 	return pygame.transform.rotate(image,10)
 
+def Gameover(screen):
+	Text = ["No one survived to claim Howell",
+			"D'Or's treasure. Too bad."]
+	y = Evento.walloftext(Text,screen)
+	proceed()
+
 #start pygame
 screen = pygame.display.set_mode((640, 480), 0, 32)
 
@@ -55,7 +61,7 @@ paper = pygame.image.load('paper2.png').convert()
 pygame.display.set_caption('Pyga')
 clock = pygame.time.Clock()
 
-#CT.Mudar_musica("Calm.ogg")
+CT.Mudar_musica("Calm.ogg")
 while True:
 	Evento.endar()
 	select = Menu.mainmenu(screen)
@@ -105,19 +111,24 @@ while True:
 			#screen.blit(linha, 20,20)
 			screen.blit(indicator,(pos,10))
 
+			if party == []:
+				Gameover()
+				break
+
 			Batalha.blitcards(screen)
 			Batalha.blitsupply(screen)
 
 			wait = 3
 
-
-			if pos >= 0:
-				getattr(Evento,"Battletest")(screen)
-
 			if progress == 20*wait:
 				pos += ship["speed"]
 				progress = 0
-			if pos == 460:
+			if pos >= 0 and "NG" not in story:
+			#	getattr(Evento,"Battletest")(screen)
+				Evento.Newgame(screen)
+				story.append("NG")
+				Misc.Savestory(story)
+			elif pos == 460:
 				getattr(Evento,Goal)(screen)
 
 			elif timeod >= 90*wait:

@@ -6,6 +6,7 @@ import random
 import Batalha
 import Misc
 import json
+import Classes as CT
 
 
 pygame.init()
@@ -35,6 +36,7 @@ def statup(char,stat,screen,y):
 		tex1 = game_font.render(mes, 1, (0, 150, 0))
 		screen.blit(tex1, (100, y))
 		pygame.display.update()
+		CT.Som("level_up.ogg")
 		time.sleep(0.8)
 	Misc.Saveparty(party)
 
@@ -64,6 +66,17 @@ def getsupply(sup,many,screen,y):
 	supply[sup]+=many
 	mes = "Got {0} {1}!".format(many,sup)
 	tex1 = game_font.render(mes, 1, (0, 150, 0))
+	screen.blit(tex1, (100, y))
+	pygame.display.update()
+	time.sleep(0.8)
+	Misc.Savesupply(supply)
+
+def losesupply(sup,many,screen,y):
+	supply = Misc.Loadsupply()
+	#raise sound
+	supply[sup]-=many
+	mes = "Lost {0} {1}!".format(many,sup)
+	tex1 = game_font.render(mes, 1, (255, 0, 0))
 	screen.blit(tex1, (100, y))
 	pygame.display.update()
 	time.sleep(0.8)
@@ -220,6 +233,28 @@ def	Battletest(screen):
 	proceed(screen)
 	Batalha.battle(["Pirate"],screen)
 	proceed(screen)
+
+
+
+def Newgame(screen):
+	Text = ["Mayara after hearing many tales",
+					"about the legendary treasure left",
+					"behind by the pirate king",
+					"Howell D'Or, said contain enough",
+					"gold to buy an entire kingdon,",
+					"decides to go after it. She talks"
+					"her childhood friend Juju into it,"
+					"and sets sail into the sea!"]
+	y = walloftext(Text,screen)
+	proceed(screen)
+	Text = ["The ocean is fraught with danger at",
+					"every turn. Only by making the",
+					"right decisions and carefully managing",
+					"managing may you have a shat at",
+					"surviving your trip and making it",
+					" to Howell D'Or's treasure!"]
+	proceed(screen)
+
 
 
 
@@ -547,7 +582,7 @@ def Fishday(screen):
 			getsupply("food",2,screen,y)
 			proceed(screen)
 		else:
-			Text = ["{} casts out the fishing rod and",
+			Text = ["{} casts out the fishing rod and".format(party[char]["nome"]),
 							"waits for a long time, but no fish",
 							"ever show up.",
 							"Maybe using an old boot as bait was",
@@ -566,14 +601,14 @@ def Fishday(screen):
 			y = walloftext(Text,screen)
 			proceed(screen)
 		elif fish >= 2:
-			Text = ["{} casts out the fishing net and",
+			Text = ["{} casts out the fishing net and".format(party[char]["nome"]),
 							"manages to catch a whole bunch of",
 							"fish with it."]
 			y = walloftext(Text,screen)
 			getsupply("food",6,screen,y)
 			proceed(screen)
 		else:
-			Text = ["{} sets up the fishing net, but",
+			Text = ["{} sets up the fishing net, but".format(party[char]["nome"]),
 							"it never manages to catch a single",
 							"fish even after being cast out",
 							"for a long time."]
@@ -649,6 +684,51 @@ def Suicide(char,screen):
 				"{} crashes to the floor".format(party[char]["nome"])]
 		y = walloftext(Text,screen)
 		Batalha.damage(char,screen,y)
+	proceed(screen)
+
+def Pullweight(char,screen):
+	party = Misc.Loadparty()
+	if len(party) >=3:
+		Text = ["Frustrated with the crew's situation,",
+						"{} says that SOMEONE hasn't been".format(party[char]["nome"]),
+						"pulling their weight and are making",
+						"everyone else miserable, so they",
+						"demand that someone be kicked from",
+						"the boat.",
+						"Who should be kicked out?"]
+		y = walloftext(Text,screen)
+		choices = []
+		exp = charchoose(choices,Text,screen) - 1
+		if exp == char:
+			Text = ["Despite {}'s repeated claims that".format(party[exp]["nome"]),
+							"they were just joking, the others",
+							"kick'em out anyway.",
+							"",
+							"Everyone is glad to see them gone."]
+		else:
+			Text = ["The crew decides to kick {} out".format(party[exp]["nome"]),
+							"for no reason. {} is heartbroken,".format(party[exp]["nome"]),
+							"but nobody liked'em anyway."]
+		y = walloftext(Text,screen)
+		party.remove(party[exp])
+		Misc.Saveparty(party)
+		for ar in range(len(party)):
+			morale(ar,2,screen,y)
+			y +=30
+	else:
+			Text = ["{} is depressed and feels that".format(party[char]["nome"]),
+							"they aren't working hard enough",
+							"to achieve their goal. In order",
+							"to turn over a new leaf, {}".format(party[char]["nome"]),
+							"tosses away most of their stuff."]
+			y = walloftext(Text,screen)
+			supply = Loadsupply()
+			sups = ["arrows","potions"]
+			for a in sups:
+				many = int(supply[a]/2)
+				losesupply("arrow",many,screen,y)
+				y+=30
+			morale(char,2,screen,y)
 	proceed(screen)
 
 
