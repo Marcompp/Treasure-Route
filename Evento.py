@@ -791,6 +791,7 @@ def	Eatsup(screen):
 	proceed(screen)
 
 def	Alcoffering(screen):
+	party = Misc.Loadparty()
 	Text=["The crew spots an offering barrel drifting",
 				"in the waves. There's likely alcohool",
 				"inside the barrel, but stealing it",
